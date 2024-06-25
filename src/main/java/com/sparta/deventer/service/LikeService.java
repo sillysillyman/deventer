@@ -12,6 +12,9 @@ import com.sparta.deventer.exception.MismatchStatusException;
 import com.sparta.deventer.repository.CommentRepository;
 import com.sparta.deventer.repository.LikeRepository;
 import com.sparta.deventer.repository.PostRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.PersistenceContext;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,9 @@ public class LikeService {
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     /**
      * 좋아요를 처리합니다. 이미 좋아요가 되어있으면 취소하고, 그렇지 않으면 좋아요를 추가합니다.
      *
@@ -36,13 +42,16 @@ public class LikeService {
     @Transactional
     public boolean toggleLike(Long likeableEntityId, String likeableEntityType, User user) {
         LikeableEntityType entityType = LikeableEntityType.getByType(likeableEntityType);
+
+        lockEntity(likeableEntityId, entityType);
+
         Optional<Like> optionalLike = likeRepository.findByLikeableEntityIdAndLikeableEntityTypeAndUserId(
             likeableEntityId, entityType, user.getId());
 
         if (optionalLike.isEmpty()) {
             validateLikeableEntityOwnership(likeableEntityId, entityType, user);
-            Like saveLike = new Like(likeableEntityId, likeableEntityType, user);
-            likeRepository.save(saveLike);
+            Like like = new Like(likeableEntityId, likeableEntityType, user);
+            likeRepository.save(like);
             return true;
         } else {
             validateLikeableEntityOwnership(likeableEntityId, entityType, user);
@@ -78,17 +87,39 @@ public class LikeService {
         if (likeableEntityType == LikeableEntityType.POST) {
             Post post = postRepository.findById(likeableEntityId).orElseThrow(
                 () -> new EntityNotFoundException(NotFoundEntity.POST_NOT_FOUND));
-            if (post.getUser().getId().equals(user.getId())) {
-                throw new MismatchStatusException(UserActionError.SELF_ACTION_NOT_ALLOWED);
-            }
+            validateOwnership(post.getUser().getId(), user.getId());
         } else if (likeableEntityType == LikeableEntityType.COMMENT) {
             Comment comment = commentRepository.findById(likeableEntityId).orElseThrow(
                 () -> new EntityNotFoundException(NotFoundEntity.COMMENT_NOT_FOUND));
-            if (comment.getUser().getId().equals(user.getId())) {
-                throw new MismatchStatusException(UserActionError.SELF_ACTION_NOT_ALLOWED);
-            }
+            validateOwnership(comment.getUser().getId(), user.getId());
         } else {
             throw new IllegalArgumentException("좋아요를 할 수 없는 엔티티 타입입니다.");
+        }
+    }
+
+    /**
+     * 특정 엔티티에 대해 락을 설정합니다.
+     *
+     * @param likeableEntityId   좋아요를 할 엔티티의 ID
+     * @param likeableEntityType 좋아요를 할 엔티티의 타입 (POST 또는 COMMENT)
+     */
+    private void lockEntity(Long likeableEntityId, LikeableEntityType likeableEntityType) {
+        if (likeableEntityType == LikeableEntityType.POST) {
+            entityManager.find(Post.class, likeableEntityId, LockModeType.PESSIMISTIC_WRITE);
+        } else if (likeableEntityType == LikeableEntityType.COMMENT) {
+            entityManager.find(Comment.class, likeableEntityId, LockModeType.PESSIMISTIC_WRITE);
+        }
+    }
+
+    /**
+     * 소유권을 검증합니다. 사용자가 자신의 엔티티에 대해 작업을 수행할 수 없도록 합니다.
+     *
+     * @param entityOwnerId 엔티티 소유자의 ID
+     * @param userId        현재 인증된 사용자 ID
+     */
+    private void validateOwnership(Long entityOwnerId, Long userId) {
+        if (entityOwnerId.equals(userId)) {
+            throw new MismatchStatusException(UserActionError.SELF_ACTION_NOT_ALLOWED);
         }
     }
 }
