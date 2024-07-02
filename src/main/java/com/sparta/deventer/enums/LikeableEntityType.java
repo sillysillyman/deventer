@@ -1,25 +1,26 @@
-package com.sparta.deventer.entity;
+package com.sparta.deventer.enums;
 
 import java.util.Objects;
 import lombok.Getter;
 
 @Getter
-public enum ContentEnumType {
-    POST("post"), COMMENT("comment");
+public enum LikeableEntityType {
+    POST("post"),
+    COMMENT("comment");
 
     private final String type;
 
-    ContentEnumType(String type) {
+    LikeableEntityType(String type) {
         this.type = type;
     }
 
-    public static ContentEnumType getByType(String type) {
+    public static LikeableEntityType getByType(String type) {
         if (Objects.equals(type, POST.type)) {
             return POST;
         } else if (Objects.equals(type, COMMENT.type)) {
             return COMMENT;
         } else {
-            throw new IllegalArgumentException("좋아요 타입이 일치 하지 않습니다.");
+            throw new IllegalArgumentException("좋아요 할 수 없는 엔티티입니다.");
         }
     }
 }
