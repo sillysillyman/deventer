@@ -1,8 +1,5 @@
 package io.sillysillyman.deventer.jwt;
 
-import io.sillysillyman.deventer.enums.UserRole;
-import io.sillysillyman.deventer.exception.InvalidTokenException;
-import io.sillysillyman.deventer.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,6 +7,9 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.sillysillyman.deventer.enums.UserRole;
+import io.sillysillyman.deventer.exception.InvalidTokenException;
+import io.sillysillyman.deventer.exception.TokenExpiredException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
@@ -24,20 +24,17 @@ import org.springframework.util.StringUtils;
 @Slf4j(topic = "JwtProvider")
 public class JwtProvider {
 
-    // Header KEY 값
     public static final String ACCESS_HEADER = "Authorization";
     public static final String REFRESH_HEADER = "X-Refresh-Token";
-    // 사용자 권한 값의 KEY
     public static final String AUTHORIZATION_KEY = "auth";
-    // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
-    // 토큰 만료시간
-    private final long ACCESS_TOKEN_EXPIRATION_TIME = 30 * 60 * 1000L; // 30분
-    // 리프레쉬 토큰 만료시간
-    private final long REFRESH_TOKEN_EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
-    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private static final long ACCESS_TOKEN_EXPIRATION_TIME = 30 * 60 * 1000L; // 30분
+    private static final long REFRESH_TOKEN_EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
+
     @Value("${jwt.secret.key}")
     private String secretKey;
+
     private Key key;
 
     @PostConstruct
@@ -48,29 +45,12 @@ public class JwtProvider {
 
     // 토큰 생성
     public String createAccessToken(String username, UserRole role) {
-        Date date = new Date();
-
-        return BEARER_PREFIX +
-            Jwts.builder()
-                .setSubject(username)
-                .claim(AUTHORIZATION_KEY, role)
-                .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_EXPIRATION_TIME))
-                .setIssuedAt(date)
-                .signWith(key, signatureAlgorithm)
-                .compact();
+        return createToken(username, role, ACCESS_TOKEN_EXPIRATION_TIME);
     }
 
     // 리프레시 토큰 생성
     public String createRefreshToken(String username) {
-        Date date = new Date();
-
-        return BEARER_PREFIX +
-            Jwts.builder()
-                .setSubject(username)
-                .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_EXPIRATION_TIME))
-                .setIssuedAt(date)
-                .signWith(key, signatureAlgorithm)
-                .compact();
+        return createToken(username, null, REFRESH_TOKEN_EXPIRATION_TIME);
     }
 
     // header 에서 JWT 가져오기
@@ -106,5 +86,20 @@ public class JwtProvider {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token)
             .getBody();
         return claims.getSubject();
+    }
+
+    private String createToken(String username, UserRole role, long expirationTime) {
+        Date now = new Date();
+
+        Claims claims = Jwts.claims().setSubject(username).setIssuedAt(now);
+        if (role != null) {
+            claims.put(AUTHORIZATION_KEY, role);
+        }
+
+        return BEARER_PREFIX + Jwts.builder()
+            .setClaims(claims)
+            .setExpiration(new Date(now.getTime() + expirationTime))
+            .signWith(key, SIGNATURE_ALGORITHM)
+            .compact();
     }
 }
