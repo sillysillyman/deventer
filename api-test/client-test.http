@@ -10,7 +10,7 @@
 @password6 = 123kfuiAsd@$%
 
 @nickname1 = first_name
-@nuckname2 = second_name
+@nickname2 = second_name
 
 @updateNickname = update_test
 
@@ -24,6 +24,8 @@
 @postId = 1
 
 @categoryId = 1
+
+@categoryTopic = 백엔드
 
 @admincode = WkdWMlpXNTBaWElnYzNWd1pYSWdZV1J0YVc0Z1kyOWtaUT09
 
@@ -171,28 +173,39 @@ Content-Type: application/json
 
 {
   "currentPassword": "{{password4}}",
-  "newPassword": "{{password5}}"
-}
-
-### 유저 비밀번호 변경 5
-PUT http://localhost:8080/users/{{userId}}/change-password
-Authorization: {{Authorization}}
-Content-Type: application/json
-
-{
-  "currentPassword": "{{password5}}",
-  "newPassword": "{{password6}}"
-}
-
-### 유저 비밀번호 변경 5
-PUT http://localhost:8080/users/{{userId}}/change-password
-Authorization: {{Authorization}}
-Content-Type: application/json
-
-{
-  "currentPassword": "{{password6}}",
   "newPassword": "{{password1}}"
 }
+
+
+### 카테고리 추가
+POST http://localhost:8080/categories
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "topic": "{{categoryTopic}}"
+}
+
+
+### 카테고리 조회
+GET http://localhost:8080/categories
+Authorization: {{Authorization}}
+
+
+### 카테고리 수정
+PUT http://localhost:8080/categories/{{categoryId}}}}
+Authorization: {{Authorization}}
+Content-Type: application/json
+
+{
+  "topic": "수정된카테고리"
+}
+
+
+### 카데고리 삭제
+DELETE http://localhost:8080/categories/{{categoryId}}
+Authorization: {{Authorization}}
+
 
 
 ### 게시글 등록
@@ -203,7 +216,7 @@ Content-Type: application/json
 {
   "title": "게시글 제목",
   "content": "게시글 내용",
-  "categoryId": 1
+  "categoryTopic": "{{categoryTopic}}"
 }
 
 
@@ -228,7 +241,7 @@ Content-Type: application/json
 {
   "title": "수정된 게시글 제목",
   "content": "수정된 게시글 내용",
-  "categoryId": 1
+  "categoryTopic": "{{categoryTopic}}"
 }
 
 
@@ -263,32 +276,16 @@ DELETE http://localhost:8080/comments/{{postId}}
 Authorization: {{Authorization}}
 
 
-
-### 카테고리 추가
-POST http://localhost:8080/categories
-Authorization: {{Authorization}}
-Content-Type: application/json
-
-{
-  "topic": "백엔드"
-}
+### 좋아요 기능
+POST http://localhost:8080/likes?contentType=post&contentId=3
+Authorization:{{Authorization}}
 
 
-### 카테고리 조회
-GET http://localhost:8080/categories
-Authorization: {{Authorization}}
+### 스크랩 기능
+POST http://localhost:8080/scraps/posts/2
+Authorization:{{Authorization}}
 
 
-### 카테고리 수정
-PUT http://localhost:8080/categories/{{categoryId}}
-Authorization: {{Authorization}}
-Content-Type: application/json
-
-{
-  "topic": "수정된카테고리"
-}
-
-
-### 카데고리 삭제
-DELETE http://localhost:8080/categories/{{categoryId}}
+### 스크랩 내용 확인
+GET http://localhost:8080/scraps/users/{{userId}}
 Authorization: {{Authorization}}
