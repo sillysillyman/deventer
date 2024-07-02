@@ -1,4 +1,4 @@
-package io.sillysillyman.deventer.dto;
+package io.sillysillyman.deventer.dto.post;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

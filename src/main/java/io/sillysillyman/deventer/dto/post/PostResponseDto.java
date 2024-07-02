@@ -1,4 +1,4 @@
-package io.sillysillyman.deventer.dto;
+package io.sillysillyman.deventer.dto.post;
 
 import io.sillysillyman.deventer.entity.Post;
 import lombok.Getter;

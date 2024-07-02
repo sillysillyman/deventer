@@ -1,5 +1,7 @@
-package io.sillysillyman.deventer.dto;
+package io.sillysillyman.deventer.dto.post;
 
+import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
+import io.sillysillyman.deventer.dto.post.PostResponseDto;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
