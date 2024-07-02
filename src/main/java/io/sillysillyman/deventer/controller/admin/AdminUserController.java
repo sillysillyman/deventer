@@ -1,9 +1,9 @@
-package io.sillysillyman.deventer.controller;
+package io.sillysillyman.deventer.controller.admin;
 
-import io.sillysillyman.deventer.dto.ChangeNicknameRequestDto;
-import io.sillysillyman.deventer.dto.UserResponseDto;
+import io.sillysillyman.deventer.dto.user.ChangeNicknameRequestDto;
+import io.sillysillyman.deventer.dto.user.UserResponseDto;
 import io.sillysillyman.deventer.enums.UserRole;
-import io.sillysillyman.deventer.service.AdminUserService;
+import io.sillysillyman.deventer.service.admin.AdminUserService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

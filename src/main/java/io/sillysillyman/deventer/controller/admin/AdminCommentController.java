@@ -1,8 +1,8 @@
-package io.sillysillyman.deventer.controller;
+package io.sillysillyman.deventer.controller.admin;
 
-import io.sillysillyman.deventer.dto.CommentRequestDto;
-import io.sillysillyman.deventer.dto.CommentResponseDto;
-import io.sillysillyman.deventer.service.AdminCommentService;
+import io.sillysillyman.deventer.dto.comment.CommentRequestDto;
+import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
+import io.sillysillyman.deventer.service.admin.AdminCommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

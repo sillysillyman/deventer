@@ -1,11 +1,11 @@
-package io.sillysillyman.deventer.controller;
+package io.sillysillyman.deventer.controller.admin;
 
-import io.sillysillyman.deventer.dto.ChangePostCategoryRequestDto;
-import io.sillysillyman.deventer.dto.CreatePostRequestDto;
-import io.sillysillyman.deventer.dto.PostResponseDto;
-import io.sillysillyman.deventer.dto.UpdatePostRequestDto;
+import io.sillysillyman.deventer.dto.post.ChangePostCategoryRequestDto;
+import io.sillysillyman.deventer.dto.post.CreatePostRequestDto;
+import io.sillysillyman.deventer.dto.post.PostResponseDto;
+import io.sillysillyman.deventer.dto.post.UpdatePostRequestDto;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
-import io.sillysillyman.deventer.service.AdminPostService;
+import io.sillysillyman.deventer.service.admin.AdminPostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
