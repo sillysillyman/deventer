@@ -1,4 +1,4 @@
-package io.sillysillyman.deventer.dto;
+package io.sillysillyman.deventer.dto.category;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

@@ -1,4 +1,4 @@
-package io.sillysillyman.deventer.dto;
+package io.sillysillyman.deventer.dto.category;
 
 import io.sillysillyman.deventer.entity.Category;
 import java.time.LocalDateTime;
