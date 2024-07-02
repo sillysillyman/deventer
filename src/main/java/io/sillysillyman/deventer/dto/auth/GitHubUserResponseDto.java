@@ -1,9 +1,9 @@
-package io.sillysillyman.deventer.dto;
+package io.sillysillyman.deventer.dto.auth;
 
 import lombok.Getter;
 
 @Getter
-public class GitHubUserDto {
+public class GitHubUserResponseDto {
 
     private String login;
     private Long id;
