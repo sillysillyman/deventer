@@ -1,7 +1,7 @@
 package io.sillysillyman.deventer.service;
 
-import io.sillysillyman.deventer.dto.CategoryRequestDto;
-import io.sillysillyman.deventer.dto.CategoryResponseDto;
+import io.sillysillyman.deventer.dto.category.CategoryRequestDto;
+import io.sillysillyman.deventer.dto.category.CategoryResponseDto;
 import io.sillysillyman.deventer.entity.Category;
 import io.sillysillyman.deventer.enums.NotFoundEntity;
 import io.sillysillyman.deventer.exception.CategoryDuplicateException;

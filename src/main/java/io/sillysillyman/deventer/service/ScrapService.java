@@ -1,6 +1,6 @@
 package io.sillysillyman.deventer.service;
 
-import io.sillysillyman.deventer.dto.ScrapResponseDto;
+import io.sillysillyman.deventer.dto.scrap.ScrapResponseDto;
 import io.sillysillyman.deventer.entity.Post;
 import io.sillysillyman.deventer.entity.Scrap;
 import io.sillysillyman.deventer.entity.User;

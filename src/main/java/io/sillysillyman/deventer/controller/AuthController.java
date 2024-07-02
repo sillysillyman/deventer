@@ -1,7 +1,7 @@
 package io.sillysillyman.deventer.controller;
 
-import io.sillysillyman.deventer.dto.LoginRequestDto;
-import io.sillysillyman.deventer.dto.SignUpRequestDto;
+import io.sillysillyman.deventer.dto.auth.LoginRequestDto;
+import io.sillysillyman.deventer.dto.auth.SignUpRequestDto;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
 import io.sillysillyman.deventer.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,7 @@
 package io.sillysillyman.deventer.controller;
 
-import io.sillysillyman.deventer.dto.CommentRequestDto;
-import io.sillysillyman.deventer.dto.CommentResponseDto;
+import io.sillysillyman.deventer.dto.comment.CommentRequestDto;
+import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
 import io.sillysillyman.deventer.service.CommentService;
 import jakarta.validation.Valid;

@@ -1,10 +1,10 @@
 package io.sillysillyman.deventer.controller;
 
-import io.sillysillyman.deventer.dto.ChangePasswordRequestDto;
-import io.sillysillyman.deventer.dto.CommentResponseDto;
-import io.sillysillyman.deventer.dto.PostResponseDto;
-import io.sillysillyman.deventer.dto.ProfileResponseDto;
-import io.sillysillyman.deventer.dto.UpdateProfileRequestDto;
+import io.sillysillyman.deventer.dto.user.ChangePasswordRequestDto;
+import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
+import io.sillysillyman.deventer.dto.post.PostResponseDto;
+import io.sillysillyman.deventer.dto.user.ProfileResponseDto;
+import io.sillysillyman.deventer.dto.user.UpdateProfileRequestDto;
 import io.sillysillyman.deventer.entity.User;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
 import io.sillysillyman.deventer.service.UserService;

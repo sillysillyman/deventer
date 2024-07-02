@@ -1,6 +1,6 @@
 package io.sillysillyman.deventer.controller;
 
-import io.sillysillyman.deventer.dto.ScrapResponseDto;
+import io.sillysillyman.deventer.dto.scrap.ScrapResponseDto;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
 import io.sillysillyman.deventer.service.ScrapService;
 import java.util.List;

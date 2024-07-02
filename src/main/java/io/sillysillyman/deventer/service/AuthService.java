@@ -1,9 +1,9 @@
 package io.sillysillyman.deventer.service;
 
-import io.sillysillyman.deventer.dto.GitHubTokenResponseDto;
-import io.sillysillyman.deventer.dto.GitHubUserDto;
-import io.sillysillyman.deventer.dto.LoginRequestDto;
-import io.sillysillyman.deventer.dto.SignUpRequestDto;
+import io.sillysillyman.deventer.dto.auth.GitHubTokenResponseDto;
+import io.sillysillyman.deventer.dto.auth.GitHubUserResponseDto;
+import io.sillysillyman.deventer.dto.auth.LoginRequestDto;
+import io.sillysillyman.deventer.dto.auth.SignUpRequestDto;
 import io.sillysillyman.deventer.entity.User;
 import io.sillysillyman.deventer.enums.NotFoundEntity;
 import io.sillysillyman.deventer.enums.UserLoginType;
@@ -138,8 +138,8 @@ public class AuthService {
     @Transactional
     public void processGitHubCallback(String code, HttpServletResponse response) {
         GitHubTokenResponseDto accessToken = getAccessToken(code);
-        GitHubUserDto gitHubUserDto = getUserInfo(accessToken);
-        User user = registerOrUpdateUser(gitHubUserDto);
+        GitHubUserResponseDto gitHubUserResponseDto = getUserInfo(accessToken);
+        User user = registerOrUpdateUser(gitHubUserResponseDto);
         issueTokens(response, user);
     }
 
@@ -222,25 +222,25 @@ public class AuthService {
      * @param gitHubTokenResponseDto 사용자의 인증코드로 발급 받은 액세스토큰
      * @return 사용자의 정보를 담은 DTO
      */
-    private GitHubUserDto getUserInfo(GitHubTokenResponseDto gitHubTokenResponseDto) {
+    private GitHubUserResponseDto getUserInfo(GitHubTokenResponseDto gitHubTokenResponseDto) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(JwtProvider.ACCESS_HEADER,
             JwtProvider.BEARER_PREFIX + gitHubTokenResponseDto.getAccess_token());
         HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<GitHubUserDto> userResponse = restTemplate.exchange(userInfoUrl,
-            HttpMethod.GET, entity, GitHubUserDto.class);
+        ResponseEntity<GitHubUserResponseDto> userResponse = restTemplate.exchange(userInfoUrl,
+            HttpMethod.GET, entity, GitHubUserResponseDto.class);
         return userResponse.getBody();
     }
 
     /**
      * 받아 온 사용자의 정보를 통해 회원인지 이미 가입된 사용자인지 확인 후 이미 가입된 사용자라면 기존 정보를 전달하고 아니라면 회원가입을 합니다.
      *
-     * @param gitHubUserDto 억세스토큰으로 깃허브로부터 받은 유저정보 DTO
+     * @param gitHubUserResponseDto 억세스토큰으로 깃허브로부터 받은 유저정보 DTO
      * @return 우리 서비스의 유저 객체
      */
-    private User registerOrUpdateUser(GitHubUserDto gitHubUserDto) {
-        String username = gitHubUserDto.getUsername();
-        String email = gitHubUserDto.getEmail();
+    private User registerOrUpdateUser(GitHubUserResponseDto gitHubUserResponseDto) {
+        String username = gitHubUserResponseDto.getUsername();
+        String email = gitHubUserResponseDto.getEmail();
 
         UserLoginType loginType = UserLoginType.GITHUB;
         Optional<User> optionalUser = userRepository.findByEmailAndLoginType(email, loginType);

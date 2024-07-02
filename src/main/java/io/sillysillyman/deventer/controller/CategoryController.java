@@ -1,7 +1,7 @@
 package io.sillysillyman.deventer.controller;
 
-import io.sillysillyman.deventer.dto.CategoryRequestDto;
-import io.sillysillyman.deventer.dto.CategoryResponseDto;
+import io.sillysillyman.deventer.dto.category.CategoryRequestDto;
+import io.sillysillyman.deventer.dto.category.CategoryResponseDto;
 import io.sillysillyman.deventer.service.CategoryService;
 import jakarta.validation.Valid;
 import java.util.List;

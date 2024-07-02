@@ -1,10 +1,10 @@
 package io.sillysillyman.deventer.service;
 
-import io.sillysillyman.deventer.dto.CommentResponseDto;
-import io.sillysillyman.deventer.dto.CreatePostRequestDto;
-import io.sillysillyman.deventer.dto.PostResponseDto;
-import io.sillysillyman.deventer.dto.PostWithCommentsResponseDto;
-import io.sillysillyman.deventer.dto.UpdatePostRequestDto;
+import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
+import io.sillysillyman.deventer.dto.post.CreatePostRequestDto;
+import io.sillysillyman.deventer.dto.post.PostResponseDto;
+import io.sillysillyman.deventer.dto.post.PostWithCommentsResponseDto;
+import io.sillysillyman.deventer.dto.post.UpdatePostRequestDto;
 import io.sillysillyman.deventer.entity.Category;
 import io.sillysillyman.deventer.entity.Comment;
 import io.sillysillyman.deventer.entity.Post;
