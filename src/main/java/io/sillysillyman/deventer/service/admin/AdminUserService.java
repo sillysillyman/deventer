@@ -1,7 +1,7 @@
-package io.sillysillyman.deventer.service;
+package io.sillysillyman.deventer.service.admin;
 
-import io.sillysillyman.deventer.dto.ChangeNicknameRequestDto;
-import io.sillysillyman.deventer.dto.UserResponseDto;
+import io.sillysillyman.deventer.dto.user.ChangeNicknameRequestDto;
+import io.sillysillyman.deventer.dto.user.UserResponseDto;
 import io.sillysillyman.deventer.entity.User;
 import io.sillysillyman.deventer.enums.NotFoundEntity;
 import io.sillysillyman.deventer.enums.UserRole;

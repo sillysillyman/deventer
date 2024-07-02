@@ -1,7 +1,7 @@
-package io.sillysillyman.deventer.service;
+package io.sillysillyman.deventer.service.admin;
 
-import io.sillysillyman.deventer.dto.CommentRequestDto;
-import io.sillysillyman.deventer.dto.CommentResponseDto;
+import io.sillysillyman.deventer.dto.comment.CommentRequestDto;
+import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
 import io.sillysillyman.deventer.entity.Comment;
 import io.sillysillyman.deventer.enums.NotFoundEntity;
 import io.sillysillyman.deventer.exception.EntityNotFoundException;

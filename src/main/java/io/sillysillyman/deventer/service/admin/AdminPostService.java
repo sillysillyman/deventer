@@ -1,9 +1,9 @@
-package io.sillysillyman.deventer.service;
+package io.sillysillyman.deventer.service.admin;
 
-import io.sillysillyman.deventer.dto.ChangePostCategoryRequestDto;
-import io.sillysillyman.deventer.dto.CreatePostRequestDto;
-import io.sillysillyman.deventer.dto.PostResponseDto;
-import io.sillysillyman.deventer.dto.UpdatePostRequestDto;
+import io.sillysillyman.deventer.dto.post.ChangePostCategoryRequestDto;
+import io.sillysillyman.deventer.dto.post.CreatePostRequestDto;
+import io.sillysillyman.deventer.dto.post.PostResponseDto;
+import io.sillysillyman.deventer.dto.post.UpdatePostRequestDto;
 import io.sillysillyman.deventer.entity.Category;
 import io.sillysillyman.deventer.entity.Post;
 import io.sillysillyman.deventer.entity.User;
