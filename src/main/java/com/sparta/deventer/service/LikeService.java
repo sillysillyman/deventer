@@ -2,9 +2,9 @@ package com.sparta.deventer.service;
 
 import com.sparta.deventer.entity.Comment;
 import com.sparta.deventer.entity.Like;
-import com.sparta.deventer.entity.LikeableEntityType;
 import com.sparta.deventer.entity.Post;
 import com.sparta.deventer.entity.User;
+import com.sparta.deventer.enums.LikeableEntityType;
 import com.sparta.deventer.enums.NotFoundEntity;
 import com.sparta.deventer.enums.UserActionError;
 import com.sparta.deventer.exception.EntityNotFoundException;

@@ -1,5 +1,6 @@
 package com.sparta.deventer.entity;
 
+import com.sparta.deventer.enums.LikeableEntityType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

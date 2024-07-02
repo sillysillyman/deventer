@@ -2,7 +2,7 @@ package com.sparta.deventer.repository;
 
 
 import com.sparta.deventer.entity.Like;
-import com.sparta.deventer.entity.LikeableEntityType;
+import com.sparta.deventer.enums.LikeableEntityType;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
