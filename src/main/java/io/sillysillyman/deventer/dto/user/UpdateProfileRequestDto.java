@@ -1,4 +1,4 @@
-package io.sillysillyman.deventer.dto;
+package io.sillysillyman.deventer.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
