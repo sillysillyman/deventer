@@ -1,4 +1,4 @@
-package io.sillysillyman.deventer.dto;
+package io.sillysillyman.deventer.dto.auth;
 
 import lombok.Getter;
 
