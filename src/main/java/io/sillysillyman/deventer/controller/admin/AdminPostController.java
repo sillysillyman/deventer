@@ -92,7 +92,7 @@ public class AdminPostController {
     }
 
     /**
-     * 게시글을 카테고리로 이동합니다.
+     * 관리자 권한으로 게시물을 다른 카테고리로 이동합니다.
      *
      * @param postId                       이동할 게시물 ID
      * @param changePostCategoryRequestDto 카테고리 이동 요청 DTO
