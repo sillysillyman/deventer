@@ -4,6 +4,7 @@ import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
 import io.sillysillyman.deventer.dto.comment.CreateCommentRequestDto;
 import io.sillysillyman.deventer.dto.comment.UpdateCommentRequestDto;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
+import io.sillysillyman.deventer.service.CommentLikeService;
 import io.sillysillyman.deventer.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CommentLikeService commentLikeService;
 
     /**
      * 댓글을 생성합니다.
@@ -41,6 +43,22 @@ public class CommentController {
             createCommentRequestDto,
             userDetails.getUser());
         return ResponseEntity.status(HttpStatus.CREATED).body(commentResponseDto);
+    }
+
+    /**
+     * 댓글에 좋아요를 토글합니다.
+     *
+     * @param commentId   좋아요를 토글할 댓글 ID
+     * @param userDetails 현재 인증된 사용자 정보
+     * @return 좋아요 처리 결과 메시지와 좋아요 개수
+     */
+    @PostMapping("/{commentId}/like")
+    public ResponseEntity<String> toggleCommentLike(
+        @PathVariable Long commentId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return ResponseEntity.ok()
+            .body(commentLikeService.toggleLike(commentId, userDetails.getUser()));
     }
 
     /**
