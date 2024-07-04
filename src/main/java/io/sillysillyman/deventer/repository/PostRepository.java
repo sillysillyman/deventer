@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificationExecutor<Post> {
 
-    Page<Post> findAllByCategory(Category category, Pageable pageable);
-
-    Page<Post> findAll(Pageable pageable);
-
     Page<Post> findByUserId(Long userId, Pageable pageable);
+
+    Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    Page<Post> findAllByCategoryOrderByCreatedAtDesc(Category category, Pageable pageable);
 }
