@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "password_histories") // 복수형?
+@Table(name = "password_histories")
 public class PasswordHistory {
 
     @Id
