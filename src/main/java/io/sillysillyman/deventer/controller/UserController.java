@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,40 +52,36 @@ public class UserController {
     /**
      * 사용자의 모든 게시물을 조회합니다.
      *
-     * @param userId      조회할 사용자 ID
      * @param userDetails 현재 인증된 사용자 정보
      * @param page        페이지 번호
      * @return 페이지 단위로 나눠진 게시물 응답 DTO
      */
-    @GetMapping("/{userId}/posts")
+    @GetMapping("/posts")
     public ResponseEntity<Page<PostResponseDto>> getAllPosts(
-        @PathVariable Long userId,
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @RequestParam(defaultValue = "0") int page) {
 
         User user = userDetails.getUser();
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        Page<PostResponseDto> postResponseDtoPage = userService.getAllPosts(userId, user, pageable);
+        Page<PostResponseDto> postResponseDtoPage = userService.getAllPosts(user, pageable);
         return ResponseEntity.ok(postResponseDtoPage);
     }
 
     /**
      * 사용자의 모든 댓글을 조회합니다.
      *
-     * @param userId      조회할 사용자 ID
      * @param userDetails 현재 인증된 사용자 정보
      * @param page        페이지 번호
      * @return 페이지 단위로 나눠진 댓글 응답 DTO
      */
-    @GetMapping("/{userId}/comments")
+    @GetMapping("/comments")
     public ResponseEntity<Page<CommentResponseDto>> getAllComments(
-        @PathVariable Long userId,
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @RequestParam(defaultValue = "0") int page) {
 
         User user = userDetails.getUser();
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        Page<CommentResponseDto> commentResponseDtoPage = userService.getAllComments(userId, user,
+        Page<CommentResponseDto> commentResponseDtoPage = userService.getAllComments(user,
             pageable);
         return ResponseEntity.ok(commentResponseDtoPage);
     }
