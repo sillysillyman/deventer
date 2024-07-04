@@ -8,7 +8,7 @@ import io.sillysillyman.deventer.enums.LikeableEntityType;
 import io.sillysillyman.deventer.enums.NotFoundEntity;
 import io.sillysillyman.deventer.enums.UserActionError;
 import io.sillysillyman.deventer.exception.EntityNotFoundException;
-import io.sillysillyman.deventer.exception.MismatchStatusException;
+import io.sillysillyman.deventer.exception.UserActionNotAllowedException;
 import io.sillysillyman.deventer.repository.CommentRepository;
 import io.sillysillyman.deventer.repository.LikeRepository;
 import io.sillysillyman.deventer.repository.PostRepository;
@@ -119,7 +119,7 @@ public class LikeService {
      */
     private void validateOwnership(Long entityOwnerId, Long userId) {
         if (entityOwnerId.equals(userId)) {
-            throw new MismatchStatusException(UserActionError.SELF_ACTION_NOT_ALLOWED);
+            throw new UserActionNotAllowedException(UserActionError.SELF_ACTION_NOT_ALLOWED);
         }
     }
 }
