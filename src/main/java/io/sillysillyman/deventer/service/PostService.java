@@ -18,9 +18,7 @@ import io.sillysillyman.deventer.repository.PostRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,13 +73,7 @@ public class PostService {
      * @return 게시물 응답 DTO 목록
      */
     public Page<PostResponseDto> getAllPosts(Pageable pageable) {
-        Pageable sortedByCreatedAtDesc = PageRequest.of(
-            pageable.getPageNumber(),
-            pageable.getPageSize(),
-            Sort.by("createdAt").descending()
-        );
-        return postRepository.findAll(sortedByCreatedAtDesc)
-            .map(PostResponseDto::new);
+        return postRepository.findAllByOrderByCreatedAtDesc(pageable).map(PostResponseDto::new);
     }
 
     /**
@@ -95,14 +87,7 @@ public class PostService {
     public Page<PostResponseDto> getPostsByCategory(Long categoryId, Pageable pageable) {
         Category category = getCategoryByIdOrThrow(categoryId);
 
-        Pageable sortedByCreatedAtDesc = PageRequest.of(
-            pageable.getPageNumber(),
-            pageable.getPageSize(),
-            Sort.by("createdAt").descending()
-        );
-
-        return postRepository.findAllByCategory(category,
-                sortedByCreatedAtDesc)
+        return postRepository.findAllByCategoryOrderByCreatedAtDesc(category, pageable)
             .map(PostResponseDto::new);
     }
 
