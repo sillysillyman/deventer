@@ -1,10 +1,13 @@
 package io.sillysillyman.deventer.entity;
 
+import io.sillysillyman.deventer.entity.like.CommentLike;
+import io.sillysillyman.deventer.entity.like.PostLike;
 import io.sillysillyman.deventer.enums.UserLoginType;
 import io.sillysillyman.deventer.enums.UserRole;
 import io.sillysillyman.deventer.enums.UserStatus;
 import io.sillysillyman.deventer.exception.AlreadyWithdrawnException;
 import io.sillysillyman.deventer.exception.InvalidPasswordException;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,8 +15,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +31,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class User extends Timestamped {
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<PostLike> postLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<CommentLike> commentLikes = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
