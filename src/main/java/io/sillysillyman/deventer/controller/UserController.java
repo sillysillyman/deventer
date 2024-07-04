@@ -1,12 +1,14 @@
 package io.sillysillyman.deventer.controller;
 
-import io.sillysillyman.deventer.dto.user.ChangePasswordRequestDto;
 import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
 import io.sillysillyman.deventer.dto.post.PostResponseDto;
+import io.sillysillyman.deventer.dto.user.ChangePasswordRequestDto;
 import io.sillysillyman.deventer.dto.user.ProfileResponseDto;
 import io.sillysillyman.deventer.dto.user.UpdateProfileRequestDto;
 import io.sillysillyman.deventer.entity.User;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
+import io.sillysillyman.deventer.service.CommentLikeService;
+import io.sillysillyman.deventer.service.PostLikeService;
 import io.sillysillyman.deventer.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,26 +27,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users/{userId}")
+@RequestMapping("/users")
 public class UserController {
 
     private static final int PAGE_SIZE = 10;
     private final UserService userService;
+    private final PostLikeService postLikeService;
+    private final CommentLikeService commentLikeService;
 
     /**
      * 사용자의 프로필을 조회합니다.
      *
-     * @param userId      조회할 사용자 ID
      * @param userDetails 현재 인증된 사용자 정보
      * @return 프로필 응답 DTO
      */
     @GetMapping
     public ResponseEntity<ProfileResponseDto> getProfile(
-        @PathVariable Long userId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User user = userDetails.getUser();
-        ProfileResponseDto profileResponseDto = userService.getProfile(userId, user);
+        ProfileResponseDto profileResponseDto = userService.getProfile(user);
         return ResponseEntity.ok(profileResponseDto);
     }
 
@@ -56,7 +58,7 @@ public class UserController {
      * @param page        페이지 번호
      * @return 페이지 단위로 나눠진 게시물 응답 DTO
      */
-    @GetMapping("/posts")
+    @GetMapping("/{userId}/posts")
     public ResponseEntity<Page<PostResponseDto>> getAllPosts(
         @PathVariable Long userId,
         @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -76,7 +78,7 @@ public class UserController {
      * @param page        페이지 번호
      * @return 페이지 단위로 나눠진 댓글 응답 DTO
      */
-    @GetMapping("/comments")
+    @GetMapping("/{userId}/comments")
     public ResponseEntity<Page<CommentResponseDto>> getAllComments(
         @PathVariable Long userId,
         @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -90,41 +92,71 @@ public class UserController {
     }
 
     /**
+     * 사용자가 좋아요 한 게시물 목록을 조회합니다.
+     *
+     * @param userDetails 현재 인증된 사용자 정보
+     * @param page        페이지 번호
+     * @return 페이지 단위로 나눠진 게시물 응답 DTO
+     */
+    @GetMapping("/likes/posts")
+    public ResponseEntity<Page<PostResponseDto>> getLikedPosts(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestParam(defaultValue = "0") int page) {
+
+        User user = userDetails.getUser();
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        return ResponseEntity.ok(postLikeService.getLikedEntities(user, pageable));
+    }
+
+    /**
+     * 사용자가 좋아요 한 댓글 목록을 조회합니다.
+     *
+     * @param userDetails 현재 인증된 사용자 정보
+     * @param page        페이지 번호
+     * @return 페이지 단위로 나눠진 댓글 응답 DTO
+     */
+    @GetMapping("/likes/comments")
+    public ResponseEntity<Page<CommentResponseDto>> getLikedComments(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestParam(defaultValue = "0") int page) {
+
+        User user = userDetails.getUser();
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        return ResponseEntity.ok(commentLikeService.getLikedEntities(user, pageable));
+    }
+
+    /**
      * 사용자의 프로필을 수정합니다.
      *
-     * @param userId                  수정할 사용자 ID
      * @param updateProfileRequestDto 프로필 수정 요청 DTO
      * @param userDetails             현재 인증된 사용자 정보
      * @return 수정된 프로필 응답 DTO
      */
     @PutMapping
     public ResponseEntity<ProfileResponseDto> updateProfile(
-        @PathVariable Long userId,
         @Valid @RequestBody UpdateProfileRequestDto updateProfileRequestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User user = userDetails.getUser();
-        ProfileResponseDto profileResponseDto = userService.updateProfile(userId,
-            updateProfileRequestDto, user);
+        ProfileResponseDto profileResponseDto = userService.updateProfile(updateProfileRequestDto,
+            user);
         return ResponseEntity.ok(profileResponseDto);
     }
 
     /**
      * 사용자의 비밀번호를 변경합니다.
      *
-     * @param userId                   변경할 사용자 ID
      * @param changePasswordRequestDto 비밀번호 변경 요청 DTO
      * @param userDetails              현재 인증된 사용자 정보
      * @return 비밀번호 변경 완료 메시지
      */
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(
-        @PathVariable Long userId,
         @Valid @RequestBody ChangePasswordRequestDto changePasswordRequestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User user = userDetails.getUser();
-        userService.changePassword(userId, changePasswordRequestDto, user);
+        userService.changePassword(changePasswordRequestDto, user);
         return ResponseEntity.ok().body("비밀번호를 변경했습니다.");
     }
 }
