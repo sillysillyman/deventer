@@ -3,6 +3,7 @@ package io.sillysillyman.deventer.dto.user;
 import io.sillysillyman.deventer.entity.User;
 import io.sillysillyman.deventer.enums.UserRole;
 import io.sillysillyman.deventer.enums.UserStatus;
+import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
@@ -14,6 +15,8 @@ public class UserResponseDto {
     private final String email;
     private final UserRole role;
     private final UserStatus status;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
     public UserResponseDto(User user) {
         this.userId = user.getId();
@@ -22,5 +25,7 @@ public class UserResponseDto {
         this.email = user.getEmail();
         this.role = user.getRole();
         this.status = user.getStatus();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
     }
 }
