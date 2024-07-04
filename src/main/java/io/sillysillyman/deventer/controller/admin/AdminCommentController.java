@@ -1,7 +1,7 @@
 package io.sillysillyman.deventer.controller.admin;
 
-import io.sillysillyman.deventer.dto.comment.CommentRequestDto;
 import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
+import io.sillysillyman.deventer.dto.comment.UpdateCommentRequestDto;
 import io.sillysillyman.deventer.service.admin.AdminCommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,17 +25,17 @@ public class AdminCommentController {
     /**
      * 관리자 권한으로 댓글을 수정합니다.
      *
-     * @param commentId         수정할 댓글 ID
-     * @param commentRequestDto 댓글 수정 정보
+     * @param commentId               수정할 댓글 ID
+     * @param updateCommentRequestDto 댓글 수정 정보
      * @return 수정된 댓글 정보
      */
     @PutMapping
     public ResponseEntity<CommentResponseDto> adminUpdateComment(
         @PathVariable Long commentId,
-        @Valid @RequestBody CommentRequestDto commentRequestDto) {
+        @Valid @RequestBody UpdateCommentRequestDto updateCommentRequestDto) {
 
         CommentResponseDto commentResponseDto = adminCommentService.updateComment(commentId,
-            commentRequestDto);
+            updateCommentRequestDto);
         return ResponseEntity.ok(commentResponseDto);
     }
 
