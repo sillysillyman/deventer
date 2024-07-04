@@ -96,7 +96,8 @@ public class AdminPostService {
      * @return 이동된 게시물 응답 DTO
      */
     @Transactional
-    public PostResponseDto changePostCategory(Long postId,
+    public PostResponseDto changePostCategory(
+        Long postId,
         ChangePostCategoryRequestDto changePostCategoryRequestDto) {
 
         Post post = getPostByIdOrThrow(postId);
@@ -104,7 +105,6 @@ public class AdminPostService {
             changePostCategoryRequestDto.getCategoryTopic());
 
         post.setCategory(category);
-        postRepository.save(post);
         return new PostResponseDto(post);
     }
 
