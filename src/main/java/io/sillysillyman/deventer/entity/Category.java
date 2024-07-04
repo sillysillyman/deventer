@@ -11,8 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @Table(name = "categories")
 public class Category extends Timestamped {
 
@@ -23,7 +23,6 @@ public class Category extends Timestamped {
     @Column(nullable = false)
     private String topic;
 
-    //테스트용
     public Category(String topic) {
         this.topic = topic;
     }
