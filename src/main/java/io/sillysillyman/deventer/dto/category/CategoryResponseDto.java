@@ -18,6 +18,6 @@ public class CategoryResponseDto {
         this.categoryId = category.getId();
         this.topic = category.getTopic();
         this.createdAt = category.getCreatedAt();
-        this.updatedAt = category.getUpdateAt();
+        this.updatedAt = category.getUpdatedAt();
     }
 }
