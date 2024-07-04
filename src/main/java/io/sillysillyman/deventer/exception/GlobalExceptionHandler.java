@@ -23,8 +23,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserInfoDuplicateException.class)
-    public ResponseEntity<Object> handleDuplicateException(UserInfoDuplicateException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getErrorMessages());
+    public ResponseEntity<Object> handelUserInfoDuplicateException(UserInfoDuplicateException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessages());
     }
 
     @ExceptionHandler(InvalidTokenException.class)
@@ -66,7 +66,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotAdminException.class)
-    public ResponseEntity<Object> handleEntityNotFoundException(NotAdminException e) {
+    public ResponseEntity<Object> handleNotAdminException(NotAdminException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(UserActionNotAllowedException.class)
+    public ResponseEntity<Object> handleUserActionNotAllowedException(
+        UserActionNotAllowedException e) {
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 }
