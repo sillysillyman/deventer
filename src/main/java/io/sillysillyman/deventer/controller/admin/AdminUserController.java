@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -97,7 +98,7 @@ public class AdminUserController {
      * @param userId 삭제할 사용자 ID
      * @return 업데이트된 사용자 정보 응답 DTO
      */
-    @PutMapping("/{userId}/delete")
+    @DeleteMapping("/{userId}/delete")
     public ResponseEntity<UserResponseDto> deleteUser(@PathVariable Long userId) {
 
         UserResponseDto userResponseDto = adminUserService.deleteUser(userId);
