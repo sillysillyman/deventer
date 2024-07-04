@@ -3,7 +3,7 @@ package io.sillysillyman.deventer.service;
 import io.sillysillyman.deventer.dto.auth.GitHubTokenResponseDto;
 import io.sillysillyman.deventer.dto.auth.GitHubUserResponseDto;
 import io.sillysillyman.deventer.dto.auth.LoginRequestDto;
-import io.sillysillyman.deventer.dto.auth.SignUpRequestDto;
+import io.sillysillyman.deventer.dto.auth.SignupRequestDto;
 import io.sillysillyman.deventer.entity.User;
 import io.sillysillyman.deventer.enums.NotFoundEntity;
 import io.sillysillyman.deventer.enums.UserLoginType;
@@ -76,16 +76,16 @@ public class AuthService {
     /**
      * 사용자가 회원가입을 합니다.
      *
-     * @param signUpRequestDto 회원가입 요청 DTO
+     * @param signupRequestDto 회원가입 요청 DTO
      * @return 회원가입 완료 메세지
      */
-    public String userSignUp(SignUpRequestDto signUpRequestDto) {
-        validateDuplicateUser(signUpRequestDto.getUsername(), signUpRequestDto.getNickname(),
-            signUpRequestDto.getEmail());
+    public String signup(SignupRequestDto signupRequestDto) {
+        validateDuplicateUser(signupRequestDto.getUsername(), signupRequestDto.getNickname(),
+            signupRequestDto.getEmail());
 
         UserRole role = UserRole.USER;
-        if (signUpRequestDto.isAdminStatus()) {
-            if (Objects.equals(adminCode, signUpRequestDto.getAdminCode())) {
+        if (signupRequestDto.isAdmin()) {
+            if (Objects.equals(adminCode, signupRequestDto.getAdminCode())) {
                 role = UserRole.ADMIN;
             } else {
                 throw new InvalidAdminCodeException("관리자 키가 일치하지 않습니다.");
@@ -93,11 +93,11 @@ public class AuthService {
         }
 
         User user = new User(
-            signUpRequestDto.getUsername(),
-            passwordEncoder.encode(signUpRequestDto.getPassword()),
-            signUpRequestDto.getNickname(),
+            signupRequestDto.getUsername(),
+            passwordEncoder.encode(signupRequestDto.getPassword()),
+            signupRequestDto.getNickname(),
             role,
-            signUpRequestDto.getEmail(),
+            signupRequestDto.getEmail(),
             UserLoginType.DEFAULT
         );
         userRepository.save(user);
