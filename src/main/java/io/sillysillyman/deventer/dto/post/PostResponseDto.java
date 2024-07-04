@@ -11,6 +11,7 @@ public class PostResponseDto {
     private final String categoryTopic;
     private final String title;
     private final String content;
+    private final int likeCount;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
@@ -19,6 +20,7 @@ public class PostResponseDto {
         this.categoryTopic = post.getCategory().getTopic();
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.likeCount = post.getLikes().size();
         this.createdAt = post.getCreatedAt();
         this.updatedAt = post.getUpdatedAt();
     }
