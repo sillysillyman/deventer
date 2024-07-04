@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public class UserInfoDuplicateException extends RuntimeException {
 
-    private List<String> errorMessages;
+    private final List<String> messages;
 
-    public UserInfoDuplicateException(List<String> errorMessageList) {
-        this.errorMessages = errorMessageList;
+    public UserInfoDuplicateException(List<String> messages) {
+        this.messages = messages;
     }
 }
