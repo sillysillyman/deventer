@@ -1,7 +1,8 @@
 package io.sillysillyman.deventer.service;
 
-import io.sillysillyman.deventer.dto.comment.CommentRequestDto;
 import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
+import io.sillysillyman.deventer.dto.comment.CreateCommentRequestDto;
+import io.sillysillyman.deventer.dto.comment.UpdateCommentRequestDto;
 import io.sillysillyman.deventer.entity.Comment;
 import io.sillysillyman.deventer.entity.Post;
 import io.sillysillyman.deventer.entity.User;
@@ -9,7 +10,7 @@ import io.sillysillyman.deventer.enums.NotFoundEntity;
 import io.sillysillyman.deventer.enums.UserActionError;
 import io.sillysillyman.deventer.enums.UserStatus;
 import io.sillysillyman.deventer.exception.EntityNotFoundException;
-import io.sillysillyman.deventer.exception.MismatchStatusException;
+import io.sillysillyman.deventer.exception.UserActionNotAllowedException;
 import io.sillysillyman.deventer.repository.CommentRepository;
 import io.sillysillyman.deventer.repository.PostRepository;
 import io.sillysillyman.deventer.repository.UserRepository;
@@ -30,15 +31,16 @@ public class CommentService {
     /**
      * 댓글을 생성합니다.
      *
-     * @param commentRequestDto 댓글 생성 요청 DTO
-     * @param user              현재 인증된 사용자 정보
+     * @param createCommentRequestDto 댓글 생성 요청 DTO
+     * @param user                    현재 인증된 사용자 정보
      * @return 생성된 댓글 응답 DTO
      */
-    public CommentResponseDto createComment(CommentRequestDto commentRequestDto, User user) {
+    public CommentResponseDto createComment(CreateCommentRequestDto createCommentRequestDto,
+        User user) {
         validateUserStatus(user.getId());
 
-        Post post = getPostByIdOrThrow(commentRequestDto.getPostId());
-        Comment comment = new Comment(commentRequestDto.getContent(), user, post);
+        Post post = getPostByIdOrThrow(createCommentRequestDto.getPostId());
+        Comment comment = new Comment(createCommentRequestDto.getContent(), user, post);
 
         commentRepository.save(comment);
         return new CommentResponseDto(comment);
@@ -47,22 +49,22 @@ public class CommentService {
     /**
      * 댓글을 수정합니다.
      *
-     * @param commentId         수정할 댓글 ID
-     * @param commentRequestDto 댓글 수정 요청 DTO
-     * @param user              현재 인증된 사용자 정보
+     * @param commentId               수정할 댓글 ID
+     * @param updateCommentRequestDto 댓글 수정 요청 DTO
+     * @param user                    현재 인증된 사용자 정보
      * @return 수정된 댓글 응답 DTO
      */
     @Transactional
     public CommentResponseDto updateComment(
         Long commentId,
-        CommentRequestDto commentRequestDto,
+        UpdateCommentRequestDto updateCommentRequestDto,
         User user) {
 
         validateUserStatus(user.getId());
 
         Comment comment = getCommentByIdOrThrow(commentId);
         validateUserOwnership(comment, user.getId());
-        comment.update(commentRequestDto.getContent());
+        comment.update(updateCommentRequestDto.getContent());
 
         return new CommentResponseDto(comment);
     }
@@ -88,7 +90,7 @@ public class CommentService {
      */
     private void validateUserOwnership(Comment comment, Long userId) {
         if (!comment.getUser().getId().equals(userId)) {
-            throw new MismatchStatusException(UserActionError.NOT_AUTHORIZED);
+            throw new UserActionNotAllowedException(UserActionError.NOT_AUTHORIZED);
         }
     }
 
@@ -101,7 +103,7 @@ public class CommentService {
         User user = userRepository.findById((userId)).orElseThrow(
             () -> new EntityNotFoundException(NotFoundEntity.USER_NOT_FOUND));
         if (user.getStatus().equals(UserStatus.BLOCKED)) {
-            throw new MismatchStatusException(UserActionError.BLOCKED_USER);
+            throw new UserActionNotAllowedException(UserActionError.BLOCKED_USER);
         }
     }
 
