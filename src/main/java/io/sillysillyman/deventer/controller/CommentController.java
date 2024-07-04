@@ -1,7 +1,8 @@
 package io.sillysillyman.deventer.controller;
 
-import io.sillysillyman.deventer.dto.comment.CommentRequestDto;
 import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
+import io.sillysillyman.deventer.dto.comment.CreateCommentRequestDto;
+import io.sillysillyman.deventer.dto.comment.UpdateCommentRequestDto;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
 import io.sillysillyman.deventer.service.CommentService;
 import jakarta.validation.Valid;
@@ -27,16 +28,17 @@ public class CommentController {
     /**
      * 댓글을 생성합니다.
      *
-     * @param commentRequestDto 댓글 생성 요청 DTO
-     * @param userDetails       현재 인증된 사용자 정보
+     * @param createCommentRequestDto 댓글 생성 요청 DTO
+     * @param userDetails             현재 인증된 사용자 정보
      * @return 생성된 댓글 응답 DTO
      */
     @PostMapping
     public ResponseEntity<CommentResponseDto> createComment(
-        @Valid @RequestBody CommentRequestDto commentRequestDto,
+        @Valid @RequestBody CreateCommentRequestDto createCommentRequestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        CommentResponseDto commentResponseDto = commentService.createComment(commentRequestDto,
+        CommentResponseDto commentResponseDto = commentService.createComment(
+            createCommentRequestDto,
             userDetails.getUser());
         return ResponseEntity.status(HttpStatus.CREATED).body(commentResponseDto);
     }
@@ -44,19 +46,19 @@ public class CommentController {
     /**
      * 댓글을 수정합니다.
      *
-     * @param commentId         수정할 댓글 ID
-     * @param commentRequestDto 댓글 수정 요청 DTO
-     * @param userDetails       현재 인증된 사용자 정보
+     * @param commentId               수정할 댓글 ID
+     * @param updateCommentRequestDto 댓글 수정 요청 DTO
+     * @param userDetails             현재 인증된 사용자 정보
      * @return 수정된 댓글 응답 DTO
      */
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> updateComment(
         @PathVariable Long commentId,
-        @Valid @RequestBody CommentRequestDto commentRequestDto,
+        @Valid @RequestBody UpdateCommentRequestDto updateCommentRequestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         return ResponseEntity.ok()
-            .body(commentService.updateComment(commentId, commentRequestDto,
+            .body(commentService.updateComment(commentId, updateCommentRequestDto,
                 userDetails.getUser()));
     }
 
