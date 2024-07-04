@@ -1,7 +1,7 @@
 package io.sillysillyman.deventer.service.admin;
 
-import io.sillysillyman.deventer.dto.comment.CommentRequestDto;
 import io.sillysillyman.deventer.dto.comment.CommentResponseDto;
+import io.sillysillyman.deventer.dto.comment.UpdateCommentRequestDto;
 import io.sillysillyman.deventer.entity.Comment;
 import io.sillysillyman.deventer.enums.NotFoundEntity;
 import io.sillysillyman.deventer.exception.EntityNotFoundException;
@@ -19,15 +19,17 @@ public class AdminCommentService {
     /**
      * 댓글을 업데이트합니다.
      *
-     * @param commentId         댓글 ID
-     * @param commentRequestDto 댓글 요청 DTO
+     * @param commentId               댓글 ID
+     * @param updateCommentRequestDto 댓글 요청 DTO
      * @return 업데이트된 댓글의 응답 DTO
      */
     @Transactional
-    public CommentResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto) {
+    public CommentResponseDto updateComment(
+        Long commentId,
+        UpdateCommentRequestDto updateCommentRequestDto) {
+        
         Comment comment = getCommentByIdOrThrow(commentId);
-        validatePostIdMatch(commentRequestDto.getPostId(), comment.getPost().getId());
-        comment.update(commentRequestDto.getContent());
+        comment.update(updateCommentRequestDto.getContent());
         return new CommentResponseDto(comment);
     }
 
@@ -39,18 +41,6 @@ public class AdminCommentService {
     public void deleteComment(Long commentId) {
         Comment comment = getCommentByIdOrThrow(commentId);
         commentRepository.delete(comment);
-    }
-
-    /**
-     * 게시글 ID가 일치하는지 확인합니다.
-     *
-     * @param requestPostId 요청된 게시글 ID
-     * @param actualPostId  실제 게시글 ID
-     */
-    public void validatePostIdMatch(Long requestPostId, Long actualPostId) {
-        if (!requestPostId.equals(actualPostId)) {
-            throw new IllegalArgumentException("요청한 게시물 ID와 실제 게시물 ID가 일치하지 않습니다.");
-        }
     }
 
     /**
