@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class SignUpRequestDto {
+public class SignupRequestDto {
 
     @NotBlank(message = "아이디는 공백일 수 없습니다.")
     @Size(min = 4, max = 10, message = "아이디는 4자이상 10자 이하여야합니다.")
@@ -29,7 +29,7 @@ public class SignUpRequestDto {
     private String email;
 
     @NotNull(message = "")
-    private boolean adminStatus;
+    private boolean admin;
 
     private String adminCode;
 }
