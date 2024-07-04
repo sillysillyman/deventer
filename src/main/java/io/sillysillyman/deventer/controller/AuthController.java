@@ -1,7 +1,7 @@
 package io.sillysillyman.deventer.controller;
 
 import io.sillysillyman.deventer.dto.auth.LoginRequestDto;
-import io.sillysillyman.deventer.dto.auth.SignUpRequestDto;
+import io.sillysillyman.deventer.dto.auth.SignupRequestDto;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
 import io.sillysillyman.deventer.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,12 +30,12 @@ public class AuthController {
      * @param signUpRequestDto 회원가입 요청 DTO
      * @return 회원가입 완료 메세지
      */
-    @PostMapping("/auth/sign-up")
-    public ResponseEntity<String> userSignUp(
-        @Valid @RequestBody SignUpRequestDto signUpRequestDto) {
+    @PostMapping("/auth/signup")
+    public ResponseEntity<String> signup(
+        @Valid @RequestBody SignupRequestDto signUpRequestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(authService.userSignUp(signUpRequestDto));
+            .body(authService.signup(signUpRequestDto));
     }
 
     /**
@@ -46,7 +46,7 @@ public class AuthController {
      * @return 회원가입 완료 메세지
      */
     @PostMapping("/auth/login")
-    public ResponseEntity<String> login(
+    public ResponseEntity<String> logIn(
         @Valid @RequestBody LoginRequestDto loginRequestDto,
         HttpServletResponse response) {
 
