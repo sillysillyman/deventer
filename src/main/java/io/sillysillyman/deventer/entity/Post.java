@@ -1,5 +1,7 @@
 package io.sillysillyman.deventer.entity;
 
+import io.sillysillyman.deventer.entity.like.PostLike;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,17 +9,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @Table(name = "posts")
 public class Post extends Timestamped {
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<PostLike> likes = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +39,10 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String content;
 
+    @Setter
+    @Column(nullable = false)
+    private boolean notice = false;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -39,10 +51,6 @@ public class Post extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-
-    @Setter
-    @Column(nullable = false)
-    private boolean notice = false;
 
     public Post(String title, String content, User user, Category category) {
         this.title = title;
