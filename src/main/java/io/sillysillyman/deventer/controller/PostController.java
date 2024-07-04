@@ -5,6 +5,7 @@ import io.sillysillyman.deventer.dto.post.PostResponseDto;
 import io.sillysillyman.deventer.dto.post.PostWithCommentsResponseDto;
 import io.sillysillyman.deventer.dto.post.UpdatePostRequestDto;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
+import io.sillysillyman.deventer.service.PostLikeService;
 import io.sillysillyman.deventer.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class PostController {
 
     private static final int PAGE_SIZE = 10;
     private final PostService postService;
+    private final PostLikeService postLikeService;
 
     /**
      * 게시물을 생성합니다.
@@ -47,6 +49,22 @@ public class PostController {
         PostResponseDto postResponseDto = postService.createPost(createPostRequestDto,
             userDetails.getUser());
         return ResponseEntity.status(HttpStatus.CREATED).body(postResponseDto);
+    }
+
+    /**
+     * 게시물에 좋아요를 토글합니다.
+     *
+     * @param postId      좋아요를 토글할 게시물 ID
+     * @param userDetails 현재 인증된 사용자 정보
+     * @return 좋아요 처리 결과 메시지와 좋아요 개수
+     */
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<String> togglePostLike(
+        @PathVariable Long postId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return ResponseEntity.ok()
+            .body(postLikeService.toggleLike(postId, userDetails.getUser()));
     }
 
     /**
