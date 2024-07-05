@@ -20,7 +20,7 @@ public abstract class LikeService<T, L, D> {
     private EntityManager entityManager;
 
     /**
-     * 엔티티에 좋아요를 토글합니다.
+     * 엔티티에 좋아요를 토글합니다. 이미 좋아요된 엔티티는 좋아요가 취소되고, 좋아요되지 않은 엔티티는 좋아요가 추가됩니다.
      *
      * @param entityId 엔티티 ID
      * @param user     현재 인증된 사용자 정보
