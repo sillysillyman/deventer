@@ -7,6 +7,7 @@ import io.sillysillyman.deventer.dto.post.UpdatePostRequestDto;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
 import io.sillysillyman.deventer.service.PostLikeService;
 import io.sillysillyman.deventer.service.PostService;
+import io.sillysillyman.deventer.service.ScrapService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public class PostController {
     private static final int PAGE_SIZE = 10;
     private final PostService postService;
     private final PostLikeService postLikeService;
+    private final ScrapService scrapService;
 
     /**
      * 게시물을 생성합니다.
@@ -52,7 +54,7 @@ public class PostController {
     }
 
     /**
-     * 게시물에 좋아요를 토글합니다.
+     * 게시물에 좋아요를 토글합니다. 이미 좋아요된 게시물은 좋아요가 취소되고, 좋아요되지 않은 게시물은 좋아요가 추가됩니다.
      *
      * @param postId      좋아요를 토글할 게시물 ID
      * @param userDetails 현재 인증된 사용자 정보
@@ -65,6 +67,22 @@ public class PostController {
 
         return ResponseEntity.ok()
             .body(postLikeService.toggleLike(postId, userDetails.getUser()));
+    }
+
+    /**
+     * 게시물에 스크랩을 토글합니다. 이미 스크랩된 게시물은 스크랩이 취소되고, 스크랩되지 않은 게시물은 스크랩이 추가됩니다.
+     *
+     * @param postId      스크랩할 게시물의 ID
+     * @param userDetails 현재 인증된 사용자 정보
+     * @return 스크랩 처리 결과 메시지
+     */
+    @PostMapping("/{postId}/scrap")
+    public ResponseEntity<String> toggleScrap(
+        @PathVariable Long postId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return ResponseEntity.ok()
+            .body(scrapService.toggleScrap(postId, userDetails.getUser()));
     }
 
     /**
