@@ -9,6 +9,7 @@ import io.sillysillyman.deventer.entity.User;
 import io.sillysillyman.deventer.security.UserDetailsImpl;
 import io.sillysillyman.deventer.service.CommentLikeService;
 import io.sillysillyman.deventer.service.PostLikeService;
+import io.sillysillyman.deventer.service.ScrapService;
 import io.sillysillyman.deventer.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class UserController {
     private final UserService userService;
     private final PostLikeService postLikeService;
     private final CommentLikeService commentLikeService;
+    private final ScrapService scrapService;
 
     /**
      * 사용자의 프로필을 조회합니다.
@@ -118,6 +120,42 @@ public class UserController {
         User user = userDetails.getUser();
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
         return ResponseEntity.ok(commentLikeService.getLikedEntities(user, pageable));
+    }
+
+    /**
+     * 사용자가 스크랩한 게시물들을 생성일자 기준으로 조회합니다.
+     *
+     * @param userDetails 현재 인증된 사용자 정보
+     * @param page        페이지 번호
+     * @return 페이지 단위로 나눠진 스크랩한 게시물 응답 DTO
+     */
+    @GetMapping("/scraps/created-at")
+    public ResponseEntity<Page<PostResponseDto>> getScrappedPostsByCreatedAt(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestParam(defaultValue = "0") int page) {
+
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        Page<PostResponseDto> postResponseDtoPage = scrapService.getScrappedPostsByCreatedAt(
+            userDetails.getUser(), pageable);
+        return ResponseEntity.ok(postResponseDtoPage);
+    }
+
+    /**
+     * 사용자가 스크랩한 게시물들을 작성자 닉네임 기준으로 조회합니다.
+     *
+     * @param userDetails 현재 인증된 사용자 정보
+     * @param page        페이지 번호
+     * @return 페이지 단위로 나눠진 스크랩한 게시물 응답 DTO
+     */
+    @GetMapping("/scrap/nickname")
+    public ResponseEntity<Page<PostResponseDto>> getScrappedPostsByNickname(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestParam(defaultValue = "0") int page) {
+
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        Page<PostResponseDto> postResponseDtoPage = scrapService.getScrappedPostsByNickname(
+            userDetails.getUser(), pageable);
+        return ResponseEntity.ok(postResponseDtoPage);
     }
 
     /**
