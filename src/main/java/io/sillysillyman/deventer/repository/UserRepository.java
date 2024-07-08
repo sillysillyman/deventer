@@ -1,21 +1,11 @@
 package io.sillysillyman.deventer.repository;
 
 import io.sillysillyman.deventer.entity.User;
-import io.sillysillyman.deventer.enums.UserLoginType;
-import java.util.Optional;
+import io.sillysillyman.deventer.repository.query.UserRepositoryQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User>,
+    UserRepositoryQuery {
 
-    Optional<User> findByUsername(String username);
-
-    boolean existsByUsername(String username);
-
-    boolean existsByNickname(String nickname);
-
-    boolean existsByEmail(String email);
-
-    Optional<User> findByEmail(String email);
-
-    Optional<User> findByEmailAndLoginType(String email, UserLoginType loginType);
 }
