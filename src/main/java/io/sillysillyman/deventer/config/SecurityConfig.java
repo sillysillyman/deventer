@@ -46,13 +46,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
             authorizeHttpRequests.requestMatchers(
                     PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .requestMatchers("/auth/refresh").permitAll()
-                .requestMatchers("/auth/login").permitAll()
-                .requestMatchers("/auth/signup").permitAll()
-                .requestMatchers("/categories/**").hasAnyAuthority(UserRole.ADMIN.getAuthority())
-                .requestMatchers(HttpMethod.GET, "/categories")
-                .hasAnyAuthority(UserRole.ADMIN.getAuthority())
+                .requestMatchers("/auth/refresh", "/auth/login", "/auth/signup").permitAll()
                 .requestMatchers(HttpMethod.GET).permitAll() // Post, Comment 조회기능만 통과하도록 추후 변경
+                .requestMatchers("/admin/**").hasAuthority(UserRole.ADMIN.getAuthority())
                 .anyRequest().authenticated()
         ).authenticationProvider(authenticationProvider);
 
